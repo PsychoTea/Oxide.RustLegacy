@@ -318,7 +318,11 @@ namespace Oxide.Game.RustLegacy
             if (netuser == null) return;
 
             Interface.Oxide.LogWarning($"An RPC message from {netuser.displayName} has triggered an exception. Kicking the player...");
-            if (netuser.connected) netuser.Kick(NetError.Facepunch_Kick_Violation, true);
+            if (netuser.connected)
+            {
+                BanList.Add(netuser.userID, netuser.displayName, "Server crasher/invalid RPC.");
+                netuser.Kick(NetError.ConnectionBanned, true);
+            }
         }
 
         /// <summary>
